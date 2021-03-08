@@ -9,35 +9,10 @@ class Malwapa extends StatefulWidget {
 }
 
 class _MalwapaState extends State<Malwapa> {
-  List<Lelwapa> malwapa = [];
-  //  = [
-  //   {
-  //     "id": 0,
-  //     "surname": "Johnson",
-  //     "plot": 123,
-  //     "housenumber": 1,
-  //     "town": 'Tlokweng',
-  //   },
-  //   {
-  //     "id": 1,
-  //     "surname": "Letlole",
-  //     "plot": 123,
-  //     "housenumber": 2,
-  //     "town": 'Tlokweng',
-  //   },
-  //   {
-  //     "id": 2,
-  //     "surname": "Lekomola",
-  //     "plot": 123,
-  //     "housenumber": 3,
-  //     "town": 'Tlokweng',
-  //   },
-  // ];
-
   @override
   void initState() {
     super.initState();
-    _getMalwapa();
+    // _getMalwapa();
   }
 
   @override
@@ -51,7 +26,7 @@ class _MalwapaState extends State<Malwapa> {
       appBar: AppBar(
         title: Text("Malwapa"),
       ),
-      body: _batho(malwapa),
+      body: _batho(),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           Navigator.of(context).push(
@@ -61,52 +36,69 @@ class _MalwapaState extends State<Malwapa> {
               },
             ),
           );
-          _getMalwapa();
+          // _getMalwapa();
         },
-        child: Icon(Icons.add),
+        child: Icon(Icons.home),
         tooltip: "Tsenya lelwapa le lesha",
       ),
     );
   }
 
-  Widget _batho(List list) {
-    return ListView.builder(
-        itemCount: malwapa.length,
-        itemBuilder: (context, i) {
-          var lelwapa = malwapa[i].toMap();
-          return Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: ListTile(
-              title: Text("House of ${lelwapa['surname']}"),
-              subtitle: Row(
-                // mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text("Plot: ${lelwapa['plot']}"),
-                      Text("Housenumber: ${lelwapa['housenumber']}"),
-                    ],
-                  ),
-                ],
-              ),
-            ),
-          );
-        });
-  }
-
-  void _getMalwapa() {
+  Widget _batho() {
     DBHelper db = DBHelper();
-    List<Lelwapa> mlp = [];
-    var res = db.getMalwapa();
-    res.then((value) {
-      value.forEach((element) {
-        mlp.add(Lelwapa.fromObject(element));
-      });
-      setState(() {
-        malwapa = mlp;
-      });
-    });
+    return FutureBuilder<List<Lelwapa>>(
+      future: db.getMalwapa(),
+      builder: (BuildContext context, AsyncSnapshot<List<Lelwapa>> snapshot) {
+        if (snapshot.hasData) {
+          return ListView.builder(
+              physics: BouncingScrollPhysics(),
+              itemCount: snapshot.data.length,
+              itemBuilder: (context, i) {
+                Lelwapa lelwapa = snapshot.data[i];
+                return Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Dismissible(
+                    background: Container(
+                      color: Colors.red,
+                    ),
+                    onDismissed: (direction) {
+                      var res = db.deleteLelwapa(lelwapa);
+                      res.then((value) {
+                        setState(() => snapshot.data.remove(value));
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content:
+                                Text("${lelwapa.surname} has been deleted."),
+                          ),
+                        );
+                      });
+                    },
+                    key: UniqueKey(),
+                    child: ListTile(
+                      title: Text("House of ${lelwapa.surname}"),
+                      subtitle: Row(
+                        // mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text("Plot: ${lelwapa.plot}"),
+                              Text("Housenumber: ${lelwapa.housenumber}"),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                );
+              });
+        } else {
+          return Center(
+            child: CircularProgressIndicator(),
+          );
+        }
+      },
+    );
   }
 }
 
