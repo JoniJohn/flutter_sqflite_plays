@@ -7,18 +7,18 @@ Key Widgets used for enabling the CRUD will be mentioned along their use cases
 # In this project
 
 # The projects involves the CRUD
-> Create
+> Create:
 Creation of tables.
 Insertion of records into tables. KEY WIDGETS [ FORM ]
 Most records are added with automatic IDs.
 
-> Read
+> Read:
 Reading records from tables.
 
-> Update
+> Update:
 Updating existing records.
 
-> Delete
+> Delete:
 Deleting of records. Which should involve referenced records.
 
 
