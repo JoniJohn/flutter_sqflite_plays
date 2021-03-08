@@ -74,35 +74,97 @@ class DBHelper {
   }
 
   // CRUD for LELWAPA
-  // add a new LELWAPA
+  // Create
   Future<int> insertLelwapa(Lelwapa lelwapa) async {
     Database db = await this.db;
-    var res = await db.insert('lelwapa', lelwapa.toMap());
+    var res = await db.insert("lelwapa", lelwapa.toMap());
     return res;
   }
 
-  // read MALWAPA
-  Future<List> getMalwapa() async {
+  // Read
+  Future<List<Lelwapa>> getMalwapa() async {
     Database db = await this.db;
-    var res = await db.rawQuery("SELECT * FROM lelwapa");
-    return res;
+    var res = await db.query("lelwapa");
+    List<Lelwapa> list = res.map((e) => Lelwapa.fromObject(e)).toList();
+    return list;
   }
 
-  // update LELWAPA
+  // Update
   Future<int> updateLelwapa(Lelwapa lelwapa) async {
     Database db = await this.db;
-    var res = await db.update('lelwapa', lelwapa.toMap(),
+    var res = await db.update("lelwapa", lelwapa.toMap(),
         where: "id = ?", whereArgs: [lelwapa.id]);
     return res;
   }
 
-  // delete LELWAPA
+  // Delete
   Future<int> deleteLelwapa(Lelwapa lelwapa) async {
     Database db = await this.db;
-    var res =
-        await db.rawDelete('delete from lelwapa where id = ${lelwapa.id}');
+    var res = db.delete("lelwapa", where: "id = ?", whereArgs: [lelwapa.id]);
     return res;
   }
 
   // CRUD for Motho
+  // Create
+  Future<int> insertMotho(Motho motho) async {
+    Database db = await this.db;
+    var res = await db.insert("motho", motho.toMap());
+    return res;
+  }
+
+  // Read
+  Future<List<Motho>> getBatho() async {
+    Database db = await this.db;
+    var res = await db.query("motho");
+    List<Motho> list = res.map((e) => Motho.fromObject(e)).toList();
+    return list;
+  }
+
+  // Update
+  Future<int> updateMotho(Motho motho) async {
+    Database db = await this.db;
+    var res = await db
+        .update("motho", motho.toMap(), where: "id = ?", whereArgs: [motho.id]);
+    return res;
+  }
+
+  // Delete
+  Future<int> deleteMotho(Motho motho) async {
+    Database db = await this.db;
+    var res = await db.delete("motho", where: "id = ?", whereArgs: [motho.id]);
+    return res;
+  }
+
+  // CRUD for Seruiwa
+  // Create
+  Future<int> insertSeruiwa(Seruiwa seruiwa) async {
+    Database db = await this.db;
+    var res = await db.insert("seruiwa", seruiwa.toMap());
+    return res;
+  }
+
+  // Read
+  Future<List<Seruiwa>> getDiruiwa() async {
+    Database db = await this.db;
+    var res = await db.query("seruiwa");
+    List<Seruiwa> list = res.map((e) => Seruiwa.fromObject(e)).toList();
+    return list;
+  }
+
+  // Update
+  Future<int> updateSeruiwa(Seruiwa seruiwa) async {
+    Database db = await this.db;
+    var res = await db.update("seruiwa", seruiwa.toMap(),
+        where: "id = ?", whereArgs: [seruiwa.id]);
+    return res;
+  }
+
+  // Delete
+  Future<int> deleteSeruiwa(Seruiwa seruiwa) async {
+    Database db = await this.db;
+    var res =
+        await db.delete("seruiwa", where: "id = ?", whereArgs: [seruiwa.id]);
+
+    return res;
+  }
 }
