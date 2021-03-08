@@ -75,6 +75,11 @@ class _MalwapaState extends State<Malwapa> {
                     },
                     key: UniqueKey(),
                     child: ListTile(
+                      onTap: () {
+                        Navigator.of(context).push(MaterialPageRoute(
+                            builder: (BuildContext context) =>
+                                LelwapaDetails(lelwapa)));
+                      },
                       title: Text("House of ${lelwapa.surname}"),
                       subtitle: Row(
                         // mainAxisAlignment: MainAxisAlignment.start,
@@ -211,6 +216,49 @@ class _TsenyaLelwapaState extends State<TsenyaLelwapa> {
                   },
                   child: Text("submit"))),
         ],
+      ),
+    );
+  }
+}
+
+class LelwapaDetails extends StatelessWidget {
+  final Lelwapa lelwapa;
+  LelwapaDetails(this.lelwapa);
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text("House of ${lelwapa.surname}"),
+      ),
+      body: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Text("id: ${lelwapa.id}"),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Text("surname: ${lelwapa.surname}"),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Text("plot: ${lelwapa.plot}"),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Text("housenumber: ${lelwapa.housenumber}"),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Text("town: ${lelwapa.town}"),
+          ),
+        ],
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {},
+        child: Icon(Icons.person),
       ),
     );
   }
