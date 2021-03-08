@@ -23,6 +23,6 @@ Deleting of records. Which should involve referenced records.
 
 
 # In this project we will cover the following as well:
-# Altering tables with already existing records
-# Populating dropdown list with data from database
+* Altering tables which have existing records
+* Populating dropdown list with data from database
 
