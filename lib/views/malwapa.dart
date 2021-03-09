@@ -256,9 +256,30 @@ class LelwapaDetails extends StatelessWidget {
           ),
         ],
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {},
-        child: Icon(Icons.person),
+      floatingActionButton: Column(
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: <Widget>[
+          SizedBox(
+            height: 47.5,
+            width: 47.5,
+            child: FloatingActionButton(
+              backgroundColor: Colors.accents[6],
+              heroTag: "edit",
+              tooltip: "edit household details",
+              onPressed: () {},
+              child: Icon(Icons.edit),
+            ),
+          ),
+          SizedBox(
+            height: 8.0,
+          ),
+          FloatingActionButton(
+            heroTag: "add",
+            tooltip: "add a new household member",
+            onPressed: () {},
+            child: Icon(Icons.person),
+          ),
+        ],
       ),
     );
   }
