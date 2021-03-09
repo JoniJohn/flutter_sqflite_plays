@@ -9,14 +9,20 @@ class Malwapa extends StatefulWidget {
 }
 
 class _MalwapaState extends State<Malwapa> {
+  DBHelper db = DBHelper();
+
+  // Future<List<Lelwapa>> malwapaSnap;
+
+  final _global = GlobalKey();
+
   @override
   void initState() {
     super.initState();
-    // _getMalwapa();
   }
 
   @override
   void dispose() {
+    _global.currentState?.dispose();
     super.dispose();
   }
 
@@ -28,15 +34,20 @@ class _MalwapaState extends State<Malwapa> {
       ),
       body: _batho(),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Navigator.of(context).push(
+        onPressed: () async {
+          var res = await Navigator.of(context).push(
             MaterialPageRoute(
               builder: (BuildContext context) {
                 return TsenyaLelwapa();
               },
             ),
           );
-          // _getMalwapa();
+          if (res == true) {
+            setState(() {
+              // malwapaSnap = db.getMalwapa();
+              _global.currentState?.build(context);
+            });
+          }
         },
         child: Icon(Icons.home),
         tooltip: "Tsenya lelwapa le lesha",
@@ -45,12 +56,14 @@ class _MalwapaState extends State<Malwapa> {
   }
 
   Widget _batho() {
-    DBHelper db = DBHelper();
+    // if (malwapaSnap == null) malwapaSnap = db.getMalwapa();
     return FutureBuilder<List<Lelwapa>>(
+      key: _global,
       future: db.getMalwapa(),
-      builder: (BuildContext context, AsyncSnapshot<List<Lelwapa>> snapshot) {
+      builder: (context, snapshot) {
         if (snapshot.hasData) {
           return ListView.builder(
+              key: UniqueKey(),
               physics: BouncingScrollPhysics(),
               itemCount: snapshot.data.length,
               itemBuilder: (context, i) {
@@ -58,6 +71,7 @@ class _MalwapaState extends State<Malwapa> {
                 return Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Dismissible(
+                    key: UniqueKey(),
                     background: Container(
                       color: Colors.red,
                     ),
@@ -73,7 +87,6 @@ class _MalwapaState extends State<Malwapa> {
                         );
                       });
                     },
-                    key: UniqueKey(),
                     child: ListTile(
                       onTap: () {
                         Navigator.of(context).push(MaterialPageRoute(
