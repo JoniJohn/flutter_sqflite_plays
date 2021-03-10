@@ -30,7 +30,7 @@ class _MalwapaState extends State<Malwapa> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Malwapa"),
+        title: Text("Households"),
       ),
       body: _batho(),
       floatingActionButton: FloatingActionButton(
@@ -44,7 +44,7 @@ class _MalwapaState extends State<Malwapa> {
           );
           if (res == true) {
             setState(() {
-              // malwapaSnap = db.getMalwapa();
+              // this makes sure the snapshot for FutureBuilder is updated after data update
               _global.currentState?.build(context);
             });
           }
@@ -56,7 +56,6 @@ class _MalwapaState extends State<Malwapa> {
   }
 
   Widget _batho() {
-    // if (malwapaSnap == null) malwapaSnap = db.getMalwapa();
     return FutureBuilder<List<Lelwapa>>(
       key: _global,
       future: db.getMalwapa(),
@@ -68,25 +67,24 @@ class _MalwapaState extends State<Malwapa> {
               itemCount: snapshot.data.length,
               itemBuilder: (context, i) {
                 Lelwapa lelwapa = snapshot.data[i];
-                return Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Dismissible(
-                    key: UniqueKey(),
-                    background: Container(
-                      color: Colors.red,
-                    ),
-                    onDismissed: (direction) {
-                      var res = db.deleteLelwapa(lelwapa);
-                      res.then((value) {
-                        setState(() => snapshot.data.remove(value));
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
-                            content:
-                                Text("${lelwapa.surname} has been deleted."),
-                          ),
-                        );
-                      });
-                    },
+                return Dismissible(
+                  key: UniqueKey(),
+                  background: Container(
+                    color: Colors.red,
+                  ),
+                  onDismissed: (direction) {
+                    var res = db.deleteLelwapa(lelwapa);
+                    res.then((value) {
+                      setState(() => snapshot.data.remove(value));
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text("${lelwapa.surname} has been deleted."),
+                        ),
+                      );
+                    });
+                  },
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
                     child: ListTile(
                       onTap: () {
                         Navigator.of(context).push(MaterialPageRoute(
